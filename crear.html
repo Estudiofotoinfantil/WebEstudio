@@ -6,10 +6,11 @@
 <title>Generador de propuestas · Estudio Fotoinfantil</title>
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#2b1b12">
-<link rel="icon" type="image/png" href="crear-assets/favicon.png?v=20e5413d">
-<link rel="apple-touch-icon" href="crear-assets/apple-touch-icon.png?v=20e5413d">
-<script src="navidad/config.js?v=20e5413d"></script>
-<script src="primer-anito/config.js?v=20e5413d"></script>
+<link rel="icon" type="image/png" href="crear-assets/favicon.png?v=11f961be">
+<link rel="apple-touch-icon" href="crear-assets/apple-touch-icon.png?v=11f961be">
+<script src="navidad/config.js?v=11f961be"></script>
+<script src="primer-anito/config.js?v=11f961be"></script>
+<script src="maternidad/config.js?v=11f961be"></script>
 <style>
 @font-face{font-family:"Pinyon";src:url(crear-assets/pinyon-script-latin-400-normal.woff2) format("woff2");font-display:swap}
 @font-face{font-family:"Cinzel";font-weight:600;src:url(crear-assets/cinzel-latin-600-normal.woff2) format("woff2");font-display:swap}
@@ -71,6 +72,7 @@ li .who b{display:block;font-family:"Cormorant LN";font-weight:700;font-size:19p
 li .who small{display:block;font-style:italic;font-size:14px;color:#cdb594;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 li .tag{display:inline-block;margin-right:6px;padding:1px 7px;border-radius:8px;font-family:"Cinzel";font-style:normal;font-weight:600;font-size:8.5px;letter-spacing:.14em;color:#3f2516;background:#e3c98d;vertical-align:1px}
 li .tag.nav{background:#d98b8b}
+li .tag.mat{background:#e6c2c9}
 li a,li button{flex:none;display:flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:21px;border:0;cursor:pointer;background:transparent;box-shadow:inset 0 0 0 1px rgba(222,190,120,.6);color:#f0d796}
 li svg{width:19px;height:19px}
 .status{margin-top:12px;font-size:15.5px;line-height:1.5;color:#e2cdb0}
@@ -111,22 +113,28 @@ li svg{width:19px;height:19px}
       <div class="lab" id="lbtipo">Sesión</div>
       <div class="chips big" role="radiogroup" aria-labelledby="lbtipo">
         <label class="chip"><input type="radio" name="tipo" value="pa"><span>PRIMER AÑITO</span></label>
+        <label class="chip"><input type="radio" name="tipo" value="mat"><span>EMBARAZO</span></label>
         <label class="chip"><input type="radio" name="tipo" value="nav"><span>NAVIDAD 2026</span></label>
       </div>
-      <label for="bebe">Nombre del bebé</label>
+      <label for="bebe" id="lb1">Nombre del bebé</label>
       <input id="bebe" maxlength="40" placeholder="Ej: Alaia" required autocapitalize="words" enterkeyhint="next">
-      <label for="mama">Nombre de la mamá <span>(opcional)</span></label>
+      <label for="mama" id="lb2">Nombre de la mamá <span>(opcional)</span></label>
       <input id="mama" maxlength="40" placeholder="Ej: Laura" autocapitalize="words" enterkeyhint="next">
-      <p class="muted hint">Si cargás el nombre de la mamá, la carta empieza con «Querida Laura,».</p>
+      <p class="muted hint" id="h1">Si cargás el nombre de la mamá, la carta empieza con «Querida Laura,».</p>
+      <div id="matf" hidden>
+        <label for="bebem">Nombre del bebé <span>(opcional)</span></label>
+        <input id="bebem" maxlength="40" placeholder="Ej: Olivia" autocapitalize="words" enterkeyhint="next">
+      </div>
       <div id="paf">
-        <div class="lab" id="lbg">Es… <span>(cambia los colores y las fotos)</span></div>
+        <div class="lab" id="lbg">Es… <span id="lbgs">(cambia los colores y las fotos)</span></div>
         <div class="chips" role="radiogroup" aria-labelledby="lbg">
           <label class="chip"><input type="radio" name="g" value="nena"><span><i style="background:#dca0ab"></i>NENA</span></label>
           <label class="chip"><input type="radio" name="g" value="nene"><span><i style="background:#a3c3da"></i>NENE</span></label>
-          <label class="chip"><input type="radio" name="g" value="" checked><span><i style="background:#d4b06e"></i>SIN ESPECIFICAR</span></label>
+          <label class="chip"><input type="radio" name="g" value="" checked><span><i style="background:#d4b06e"></i><b id="gneu" style="font-weight:inherit">SIN ESPECIFICAR</b></span></label>
         </div>
         <div class="row2">
-          <div><label for="cumple">Primer cumple <span>(opcional)</span></label><input id="cumple" type="date"></div>
+          <div id="wcumple"><label for="cumple">Primer cumple <span>(opcional)</span></label><input id="cumple" type="date"></div>
+          <div id="wfpp" hidden><label for="fpp">Fecha de parto</label><input id="fpp" type="date"></div>
           <div><label for="hasta">Valores hasta</label><input id="hasta" type="date"></div>
         </div>
         <div class="chips" id="vchips" aria-label="Vigencia rápida">
@@ -135,7 +143,7 @@ li svg{width:19px;height:19px}
           <label class="chip"><input type="radio" name="vig" value="30"><span>30 DÍAS</span></label>
           <label class="chip"><input type="radio" name="vig" value="0"><span>SIN FECHA</span></label>
         </div>
-        <p class="muted hint">Con la fecha del cumple, la propuesta cuenta las semanas que faltan y marca el momento ideal en el calendario. Los valores del link quedan fijos hasta la fecha de vigencia.</p>
+        <p class="muted hint" id="h2">Con la fecha del cumple, la propuesta cuenta las semanas que faltan y marca el momento ideal en el calendario. Los valores del link quedan fijos hasta la fecha de vigencia.</p>
       </div>
       <button class="btn" type="submit">CREAR LINK</button>
       <p class="err" id="ferr" hidden></p>
@@ -176,8 +184,8 @@ li svg{width:19px;height:19px}
   'use strict';
   var HASH = 'eb75d1288917be867ef113a5fc8f9cdee42feec65e211eb43ce34d281c9e1e44';
   var KEY_OK = 'navgen_ok', KEY_H = 'navgen_hist', KEY_T = 'navgen_tipo';
-  var NAV = window.NAVIDAD || {}, PA = window.PRIMER_ANITO || {};
-  var TIPOS = { pa: { name: 'Primer añito', path: 'primer-anito/' }, nav: { name: 'Navidad 2026', path: 'navidad/' } };
+  var NAV = window.NAVIDAD || {}, PA = window.PRIMER_ANITO || {}, MAT = window.MATERNIDAD || {};
+  var TIPOS = { pa: { name: 'Primer añito', path: 'primer-anito/' }, mat: { name: 'Embarazo', path: 'maternidad/' }, nav: { name: 'Navidad 2026', path: 'navidad/' } };
   function $(s) { return document.querySelector(s); }
   function $$(s) { return Array.prototype.slice.call(document.querySelectorAll(s)); }
   function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) { return null; } }
@@ -231,11 +239,32 @@ li svg{width:19px;height:19px}
     return s;
   }
   var q0 = new URLSearchParams(location.search);
-  var tipo0 = q0.get('tipo') === 'navidad' ? 'nav' : (q0.get('tipo') === 'primer-anito' ? 'pa' : (store(KEY_T) || 'pa'));
+  var TQ = { navidad: 'nav', 'primer-anito': 'pa', maternidad: 'mat', embarazo: 'mat' };
+  var tipo0 = TQ[q0.get('tipo')] || store(KEY_T) || 'pa';
   if (!TIPOS[tipo0]) tipo0 = 'pa';
   $$('input[name=tipo]').forEach(function (r) { r.checked = r.value === tipo0; });
   function tipo() { var r = $('input[name=tipo]:checked'); return r ? r.value : 'pa'; }
-  function syncTipo() { $('#paf').hidden = tipo() !== 'pa'; store(KEY_T, tipo()); }
+  var LBL = {
+    pa: { l1: 'Nombre del bebé', p1: 'Ej: Alaia', l2: 'Nombre de la mamá <span>(opcional)</span>', p2: 'Ej: Laura', h1: 'Si cargás el nombre de la mamá, la carta empieza con «Querida Laura,».' },
+    nav: { l1: 'Nombre del bebé', p1: 'Ej: Alaia', l2: 'Nombre de la mamá <span>(opcional)</span>', p2: 'Ej: Laura', h1: 'Si cargás el nombre de la mamá, la carta empieza con «Querida Laura,».' },
+    mat: { l1: 'Nombre de la mamá', p1: 'Ej: Micaela', l2: 'Nombre de la pareja <span>(opcional)</span>', p2: 'Ej: Lucas', h1: 'Con pareja, la propuesta dice «Micaela & Lucas» y la carta empieza con «Queridos Micaela y Lucas,».' }
+  };
+  function syncTipo() {
+    var t = tipo(), L = LBL[t];
+    $('#paf').hidden = t === 'nav';
+    $('#matf').hidden = t !== 'mat';
+    $('#wcumple').hidden = t !== 'pa';
+    $('#wfpp').hidden = t !== 'mat';
+    $('#lb1').textContent = L.l1; $('#bebe').placeholder = L.p1;
+    $('#lb2').innerHTML = L.l2; $('#mama').placeholder = L.p2;
+    $('#h1').textContent = L.h1;
+    $('#lbgs').textContent = t === 'mat' ? '(cambia los colores)' : '(cambia los colores y las fotos)';
+    $('#gneu').textContent = t === 'mat' ? 'SORPRESA' : 'SIN ESPECIFICAR';
+    $('#h2').textContent = t === 'mat'
+      ? 'Con la fecha probable de parto, la propuesta muestra en qué semana está y marca su momento ideal (semanas 28 a 34). Los valores del link quedan fijos hasta la fecha de vigencia.'
+      : 'Con la fecha del cumple, la propuesta cuenta las semanas que faltan y marca el momento ideal en el calendario. Los valores del link quedan fijos hasta la fecha de vigencia.';
+    store(KEY_T, t);
+  }
   $$('input[name=tipo]').forEach(function (r) { r.addEventListener('change', syncTipo); });
   syncTipo();
 
@@ -253,6 +282,14 @@ li svg{width:19px;height:19px}
   function linkFor(x) {
     var q = new URLSearchParams();
     q.set('para', x.b);
+    if (x.tipo === 'mat') {
+      if (x.m) q.set('pareja', x.m);
+      if (x.n) q.set('bebe', x.n);
+      if (x.g) q.set('g', x.g);
+      if (x.f) q.set('fpp', x.f);
+      if (x.h) { q.set('hasta', x.h); if (x.l) q.set('l', x.l); }
+      return BASE + TIPOS[x.tipo].path + '?' + q.toString();
+    }
     if (x.m) q.set('mama', x.m);
     if (x.tipo === 'pa') {
       if (x.g) q.set('g', x.g);
@@ -262,6 +299,10 @@ li svg{width:19px;height:19px}
     return BASE + TIPOS[x.tipo].path + '?' + q.toString();
   }
   function msgFor(x, link) {
+    if (x.tipo === 'mat') {
+      return '¡Hola ' + x.b + (x.m ? ' y ' + x.m : '') + '! 🤍 Te comparto la propuesta para ' + (x.m ? 'su' : 'tu') + ' sesión de embarazo, que preparamos especialmente para ' + (x.m ? 'ustedes' : 'vos') + ' ✨\n' +
+        (x.m ? 'Ahí van a encontrar los packs, ' + (x.f ? 'su momento ideal' : 'las fechas') : 'Ahí vas a encontrar los packs, ' + (x.f ? 'tu momento ideal' : 'las fechas')) + ' y cómo reservar.\n\n' + link;
+    }
     if (x.tipo === 'nav') {
       return (x.m ? '¡Hola ' + x.m + '! 🎄' : '¡Hola! 🎄') + ' Te comparto la propuesta de Navidad 2026 que preparamos especialmente para ' + x.b + ' ✨\n' +
         'Ahí vas a encontrar las experiencias, las fechas y cómo reservar.\n\n' + link;
@@ -271,6 +312,14 @@ li svg{width:19px;height:19px}
   }
   function detFor(x) {
     if (x.tipo === 'nav') return 'Navidad 2026';
+    if (x.tipo === 'mat') {
+      var e = ['Embarazo'];
+      if (x.n) e.push('bebé ' + x.n);
+      if (x.g) e.push(x.g === 'nena' ? 'nena' : 'nene');
+      if (x.f) e.push('parto ' + fmtDate(x.f));
+      e.push(x.h ? 'valores hasta ' + fmtDate(x.h) : 'sin vencimiento');
+      return e.join(' · ');
+    }
     var d = ['Primer añito'];
     if (x.g) d.push(x.g === 'nena' ? 'nena' : 'nene');
     if (x.c) d.push('cumple ' + fmtDate(x.c));
@@ -293,7 +342,7 @@ li svg{width:19px;height:19px}
     var link = linkFor(x);
     cur = { x: x, link: link };
     $('#rk').textContent = 'PROPUESTA ' + TIPOS[x.tipo].name.toUpperCase() + ' PARA';
-    $('#rnm').textContent = x.b + (x.m ? ' · ' + x.m : '');
+    $('#rnm').textContent = x.b + (x.m ? (x.tipo === 'mat' ? ' & ' : ' · ') + x.m : '');
     $('#rdet').textContent = detFor(x);
     $('#link').textContent = link;
     $('#bview').href = link;
@@ -308,8 +357,19 @@ li svg{width:19px;height:19px}
     e.preventDefault();
     ferr('');
     var t = tipo(), b = clean($('#bebe').value), m = clean($('#mama').value);
-    if (!b) { ferr('Falta el nombre del bebé.'); $('#bebe').focus(); return; }
+    if (!b) { ferr(t === 'mat' ? 'Falta el nombre de la mamá.' : 'Falta el nombre del bebé.'); $('#bebe').focus(); return; }
     var x = { tipo: t, b: b, m: m, t: Date.now() };
+    if (t === 'mat') {
+      var gm = $('input[name=g]:checked');
+      x.g = gm ? gm.value : '';
+      x.n = clean($('#bebem').value);
+      var f = $('#fpp').value.trim(), hm = $('#hasta').value.trim();
+      if (f && !validDate(f)) { ferr('La fecha de parto no es válida.'); return; }
+      if (f && (f < addDays(todayAR(), -30) || f > addDays(todayAR(), 300))) { ferr('Revisá la fecha de parto: debería ser dentro de los próximos 9 meses.'); return; }
+      if (hm && !validDate(hm)) { ferr('La fecha de vigencia no es válida.'); return; }
+      if (hm && hm < todayAR()) { ferr('La vigencia no puede ser anterior a hoy.'); return; }
+      x.f = f; x.h = hm; x.l = MAT.listaActual || '';
+    }
     if (t === 'pa') {
       var g = $('input[name=g]:checked');
       x.g = g ? g.value : '';
@@ -332,7 +392,7 @@ li svg{width:19px;height:19px}
     try { h = JSON.parse(store(KEY_H) || '[]') || []; } catch (e) { h = []; }
     return h.map(function (x) { if (!x.tipo) x.tipo = 'nav'; return x; }).filter(function (x) { return TIPOS[x.tipo] && x.b; });
   }
-  function same(a, b) { return a.tipo === b.tipo && a.b === b.b && (a.m || '') === (b.m || '') && (a.g || '') === (b.g || '') && (a.c || '') === (b.c || '') && (a.h || '') === (b.h || ''); }
+  function same(a, b) { return a.tipo === b.tipo && a.b === b.b && (a.m || '') === (b.m || '') && (a.g || '') === (b.g || '') && (a.c || '') === (b.c || '') && (a.h || '') === (b.h || '') && (a.n || '') === (b.n || '') && (a.f || '') === (b.f || ''); }
   function addHist(x) {
     var h = getHist().filter(function (y) { return !same(x, y); });
     h.unshift(x);
@@ -348,11 +408,11 @@ li svg{width:19px;height:19px}
       var link = linkFor(x);
       var li = document.createElement('li');
       var who = document.createElement('div'); who.className = 'who';
-      var bb = document.createElement('b'); bb.textContent = x.b + (x.m ? ' · ' + x.m : '');
+      var bb = document.createElement('b'); bb.textContent = x.b + (x.m ? (x.tipo === 'mat' ? ' & ' : ' · ') + x.m : '');
       var sm = document.createElement('small');
-      var tg = document.createElement('span'); tg.className = 'tag' + (x.tipo === 'nav' ? ' nav' : ''); tg.textContent = x.tipo === 'nav' ? 'NAVIDAD' : 'AÑITO';
+      var tg = document.createElement('span'); tg.className = 'tag' + (x.tipo === 'nav' ? ' nav' : (x.tipo === 'mat' ? ' mat' : '')); tg.textContent = { nav: 'NAVIDAD', mat: 'EMBARAZO', pa: 'AÑITO' }[x.tipo];
       sm.appendChild(tg);
-      sm.appendChild(document.createTextNode(fmt(x.t) + (x.tipo === 'pa' && x.h ? ' · hasta ' + fmtDate(x.h) : '') + (x.tipo === 'pa' && x.c ? ' · cumple ' + fmtDate(x.c) : '')));
+      sm.appendChild(document.createTextNode(fmt(x.t) + (x.tipo !== 'nav' && x.h ? ' · hasta ' + fmtDate(x.h) : '') + (x.tipo === 'pa' && x.c ? ' · cumple ' + fmtDate(x.c) : '') + (x.tipo === 'mat' && x.f ? ' · parto ' + fmtDate(x.f) : '')));
       who.appendChild(bb); who.appendChild(sm);
       var wa = document.createElement('a'); wa.href = waShare(msgFor(x, link)); wa.target = '_blank'; wa.rel = 'noopener'; wa.setAttribute('aria-label', 'Enviar por WhatsApp');
       wa.innerHTML = '<svg aria-hidden="true"><use href="#chat"/></svg>';
@@ -375,6 +435,9 @@ li svg{width:19px;height:19px}
     out += '<h3>PRIMER AÑITO</h3>';
     if (L) out += 'Valores actuales (lista <b>' + PA.listaActual + '</b>): Esencial <b>$' + money(L.esencial) + '</b> · Recuerdo <b>$' + money(L.recuerdo) + '</b> · Historia <b>$' + money(L.historia) + '</b>.<br>';
     out += 'Vigencia sugerida: <b>' + VD + ' días</b>. Los días ocupados se leen del sistema de reservas.';
+    var LM = (MAT.listas || {})[MAT.listaActual];
+    out += '<h3>EMBARAZO</h3>';
+    if (LM) out += 'Valores actuales (lista <b>' + MAT.listaActual + '</b>): Esencial <b>$' + money(LM.esencial) + '</b> · Recuerdo (con cuadro) <b>$' + money(LM.recuerdo) + '</b>.';
     var rh = NAV.regaloHasta || '2026-10-31', comp = (NAV.completos || []).slice().sort();
     out += '<h3>NAVIDAD 2026</h3>';
     out += (hoy <= rh ? 'Regalo de octubre: <b>activo</b> hasta el ' + fmtDate(rh) + '.' : 'Regalo de octubre: <b>terminado</b> (ya no se muestra).') + '<br>';
