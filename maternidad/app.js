@@ -1,3 +1,4 @@
+window.__CFG_DEF = {"whatsapp":"5491130448139","reservasURL":"https://script.google.com/macros/s/AKfycbxlWQSw4Bj2PYrJlnUVC4QdpcYAVV0vIu-ZqenCTMEOgbolkSfKY_Gr1h140VeMAc3YXw/exec","sena":0.2,"vigenciaDias":7,"listaActual":"2026-10","listas":{"2026-10":{"esencial":65000,"recuerdo":89000,"cuadro":39000,"carpeta":18000}},"horarios":{"semana":["18:15","19:15"],"sabado":["10:00","11:00","13:00","14:00"],"feriado":["10:00","11:00","13:00","14:00"]},"feriados":["2026-11-09","2026-11-10","2026-11-23","2026-12-07","2026-12-08","2026-12-25","2027-01-01","2027-02-08","2027-02-09","2027-03-24","2027-03-26","2027-04-02","2027-05-01","2027-05-25","2027-06-20","2027-06-21","2027-07-09","2027-08-16","2027-10-11","2027-11-20","2027-12-08","2027-12-25"],"cerrados":["2026-12-24","2026-12-25","2026-12-31","2027-01-01","2027-12-24","2027-12-25","2027-12-31"],"completos":[]};
 /* Estudio Fotoinfantil · motor de propuestas personalizadas (web + PDF)
    Cada propuesta llama a Prop.start({...}) con sus textos y reglas. */
 (function () {
@@ -50,6 +51,31 @@
   function fmtLong(s, wd) { var d = parse(s); return (wd === false ? '' : DIAS[d.getUTCDay()] + ' ') + d.getUTCDate() + ' de ' + MESES[d.getUTCMonth()]; }
   function fmtShort(s) { var d = parse(s); return d.getUTCDate() + '/' + (d.getUTCMonth() + 1); }
   function money(n) { return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+
+  /* precios: lee la lista del link (si sigue vigente) o la actual. Perdona errores comunes al editar config.js:
+     "70.000" escrito como número (JS lo lee 70) o como texto "$70.000". Si config.js no carga o tiene un error,
+     usa los valores con los que se publicó la propuesta (window.__CFG_DEF). */
+  function priceNum(v) {
+    if (typeof v === 'string') v = Number(v.replace(/[^\d]/g, ''));
+    if (typeof v !== 'number' || !isFinite(v) || v <= 0) return NaN;
+    return v < 1000 ? Math.round(v * 1000) : Math.round(v);
+  }
+  function priceList(C, keys, listaId, vigente) {
+    var DEF = window.__CFG_DEF || {};
+    function norm(L) {
+      if (!L || typeof L !== 'object') return null;
+      var o = {};
+      for (var i = 0; i < keys.length; i++) { var n = priceNum(L[keys[i]]); if (isNaN(n)) return null; o[keys[i]] = n; }
+      return o;
+    }
+    var ls = (C && C.listas) || {}, L;
+    if (vigente && listaId && (L = norm(ls[listaId]))) return { id: listaId, L: L };
+    if (C && (L = norm(ls[C.listaActual]))) return { id: C.listaActual, L: L };
+    var ids = Object.keys(ls).filter(function (k) { return norm(ls[k]); }).sort();
+    if (ids.length) return { id: ids[ids.length - 1], L: norm(ls[ids[ids.length - 1]]) };
+    var dl = DEF.listas || {};
+    return { id: DEF.listaActual || '', L: norm(dl[DEF.listaActual]) || {}, fallback: true };
+  }
 
   /* ---------------------------------------------------------------- textos en la página */
   var T = {}, H = {}, TYPE = null;
@@ -510,7 +536,7 @@
   }
 
   window.PROP = { Q: Q, PDFBG: PDFBG, clean: clean, esc: esc, validDate: validDate, today: today, addDays: addDays, diffDays: diffDays,
-    dow: dow, parse: parse, iso: iso, fmtLong: fmtLong, fmtShort: fmtShort, money: money, MESES: MESES, DIAS: DIAS,
+    dow: dow, parse: parse, iso: iso, fmtLong: fmtLong, fmtShort: fmtShort, money: money, priceNum: priceNum, priceList: priceList, MESES: MESES, DIAS: DIAS,
     start: start, refresh: refresh, fitAll: fitAll, makePDF: makePDF, snapshot: snapshot, toast: toast, T: function () { return T; }, H: function () { return H; } };
 })();
 
@@ -521,7 +547,7 @@
 (function () {
   'use strict';
   var P = window.PROP, Q = P.Q;
-  var C = window.MATERNIDAD || {};
+  var C = window.MATERNIDAD || window.__CFG_DEF || {};
   var G = window.__G || 'neutro';
   var WA = String(C.whatsapp || '5491130448139').replace(/\D/g, '');
 
@@ -535,13 +561,11 @@
   if (!mama) pareja = '';           // "Querida mamá" sin nombre: la pareja sola no alcanza
 
   /* ---------------------------------------------------------------- precios */
-  var listas = C.listas || {};
-  var actual = listas[C.listaActual] ? C.listaActual : Object.keys(listas).pop();
   var vigente = !!hasta && hasta >= HOY;
   var vencida = !!hasta && hasta < HOY;
-  var lid = vigente && listas[listaId] ? listaId : actual;
-  var L = listas[lid] || {};
-  var SENA = typeof C.sena === 'number' ? C.sena : 0.2;
+  var PL = P.priceList(C, ['esencial', 'recuerdo', 'cuadro', 'carpeta'], listaId, vigente);
+  var lid = PL.id, L = PL.L;
+  var SENA = typeof C.sena === 'number' && C.sena > 0 && C.sena < 1 ? C.sena : (C.sena >= 1 && C.sena < 100 ? C.sena / 100 : 0.2);
   var m = P.money;
   var PK = {
     esencial: { price: L.esencial, sep: 0 },

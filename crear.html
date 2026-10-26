@@ -6,11 +6,11 @@
 <title>Generador de propuestas · Estudio Fotoinfantil</title>
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#2b1b12">
-<link rel="icon" type="image/png" href="crear-assets/favicon.png?v=c166a434">
-<link rel="apple-touch-icon" href="crear-assets/apple-touch-icon.png?v=c166a434">
-<script src="navidad/config.js?v=c166a434"></script>
-<script src="primer-anito/config.js?v=c166a434"></script>
-<script src="maternidad/config.js?v=c166a434"></script>
+<link rel="icon" type="image/png" href="crear-assets/favicon.png?v=1f4f9039">
+<link rel="apple-touch-icon" href="crear-assets/apple-touch-icon.png?v=1f4f9039">
+<script src="navidad/config.js?v=1f4f9039"></script>
+<script src="primer-anito/config.js?v=1f4f9039"></script>
+<script src="maternidad/config.js?v=1f4f9039"></script>
 <style>
 @font-face{font-family:"Pinyon";src:url(crear-assets/pinyon-script-latin-400-normal.woff2) format("woff2");font-display:swap}
 @font-face{font-family:"Cinzel";font-weight:600;src:url(crear-assets/cinzel-latin-600-normal.woff2) format("woff2");font-display:swap}
@@ -182,7 +182,7 @@ li svg{width:19px;height:19px}
 <script>
 (function () {
   'use strict';
-  var HASH = 'eb75d1288917be867ef113a5fc8f9cdee42feec65e211eb43ce34d281c9e1e44';
+  var HASH = 'fa869db9687c308c2af5bbe545c2247c93095af297a9a0c0560c305123a86428';
   var KEY_OK = 'navgen_ok', KEY_H = 'navgen_hist', KEY_T = 'navgen_tipo';
   var NAV = window.NAVIDAD || {}, PA = window.PRIMER_ANITO || {}, MAT = window.MATERNIDAD || {};
   var TIPOS = { pa: { name: 'Primer añito', path: 'primer-anito/' }, mat: { name: 'Embarazo', path: 'maternidad/' }, nav: { name: 'Navidad 2026', path: 'navidad/' } };
@@ -222,7 +222,7 @@ li svg{width:19px;height:19px}
   $('#lockf').addEventListener('submit', async function (e) {
     e.preventDefault();
     var h = '';
-    try { h = await sha($('#pw').value.trim()); } catch (err) { h = ''; }
+    try { h = await sha($('#pw').value.trim().toUpperCase()); } catch (err) { h = ''; }
     if (h === HASH) { store(KEY_OK, HASH); $('#err').hidden = true; unlock(); }
     else { $('#err').hidden = false; $('#pw').select(); }
   });
@@ -429,17 +429,33 @@ li svg{width:19px;height:19px}
   $('#clr').addEventListener('click', function () { if (confirm('¿Borrar la lista de links de este dispositivo?')) { store(KEY_H, null); renderHist(); } });
 
   /* ---------------------------------------------------------------- estado */
+  function priceNum(v) {
+    if (typeof v === 'string') v = Number(v.replace(/[^\d]/g, ''));
+    if (typeof v !== 'number' || !isFinite(v) || v <= 0) return NaN;
+    return v < 1000 ? Math.round(v * 1000) : Math.round(v);
+  }
+  function checkCfg(C, keys) {   // devuelve la lista actual normalizada o null si config.js tiene un problema
+    var L = C && C.listas && C.listas[C.listaActual];
+    if (!L) return null;
+    var o = {};
+    for (var i = 0; i < keys.length; i++) { var n = priceNum(L[keys[i]]); if (isNaN(n)) return null; o[keys[i]] = n; }
+    return o;
+  }
+  var WARN = '<b style="color:#ffb4b4">⚠ </b>';
   function renderStatus() {
     var hoy = todayAR(), out = '';
-    var L = (PA.listas || {})[PA.listaActual];
+    var L = checkCfg(PA, ['esencial', 'recuerdo', 'historia', 'cuadro', 'carpeta', 'calendario']);
     out += '<h3>PRIMER AÑITO</h3>';
     if (L) out += 'Valores actuales (lista <b>' + PA.listaActual + '</b>): Esencial <b>$' + money(L.esencial) + '</b> · Recuerdo <b>$' + money(L.recuerdo) + '</b> · Historia <b>$' + money(L.historia) + '</b>.<br>';
+    else out += WARN + '<b>Revisá primer-anito/config.js</b>: no se pudo leer la lista de precios actual. Mientras tanto la propuesta muestra los valores con los que se publicó.<br>';
     out += 'Vigencia sugerida: <b>' + VD + ' días</b>. Los días ocupados se leen del sistema de reservas.';
-    var LM = (MAT.listas || {})[MAT.listaActual];
+    var LM = checkCfg(MAT, ['esencial', 'recuerdo', 'cuadro', 'carpeta']);
     out += '<h3>EMBARAZO</h3>';
     if (LM) out += 'Valores actuales (lista <b>' + MAT.listaActual + '</b>): Esencial <b>$' + money(LM.esencial) + '</b> · Recuerdo (con cuadro) <b>$' + money(LM.recuerdo) + '</b>.';
+    else out += WARN + '<b>Revisá maternidad/config.js</b>: no se pudo leer la lista de precios actual. Mientras tanto la propuesta muestra los valores con los que se publicó.';
     var rh = NAV.regaloHasta || '2026-10-31', comp = (NAV.completos || []).slice().sort();
     out += '<h3>NAVIDAD 2026</h3>';
+    if (!window.NAVIDAD) out += WARN + '<b>Revisá navidad/config.js</b>: no se pudo leer.<br>';
     out += (hoy <= rh ? 'Regalo de octubre: <b>activo</b> hasta el ' + fmtDate(rh) + '.' : 'Regalo de octubre: <b>terminado</b> (ya no se muestra).') + '<br>';
     out += (comp.length ? 'Días completos: <b>' + comp.map(fmtDate).join(', ') + '</b>.' : 'Días completos: <b>ninguno</b> por ahora.') + '<br>';
     out += 'Turnos hasta el <b>' + fmtDate(NAV.ultimoDia || '2026-12-23') + '</b>.';

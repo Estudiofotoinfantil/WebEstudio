@@ -2,6 +2,8 @@
    PRECIOS: los links nuevos usan la lista "listaActual". Un link ya enviado conserva su lista
    mientras esté vigente (fecha "hasta" del link). Para cambiar precios: copiá la lista, ponele otro
    nombre (ej. "2026-12"), cambiá los valores y poné ese nombre en "listaActual".
+   Escribí los precios sin puntos ni $ (65000). Respetá las comillas y las comas: si este archivo queda
+   con un error, la propuesta muestra los valores con los que se publicó y el generador te avisa.
    esencial = sesión sola · recuerdo = sesión + cuadro · cuadro y carpeta = extras.
    FERIADOS / CERRADOS / COMPLETOS: fechas AAAA-MM-DD. Los turnos ocupados se leen solos del sistema de reservas. */
 window.MATERNIDAD = {
