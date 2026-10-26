@@ -35,6 +35,8 @@
   }
   k();
   window.addEventListener('resize', k);
+  window.addEventListener('load', k);   // al aparecer la barra de scroll (PC) cambia el ancho útil
+  if (window.ResizeObserver) new ResizeObserver(function () { requestAnimationFrame(k); }).observe(d);
   window.__fitK = k;
 })();
 </script>

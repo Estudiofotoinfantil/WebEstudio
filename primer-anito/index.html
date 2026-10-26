@@ -11,13 +11,13 @@
 <meta property="og:site_name" content="Estudio Fotoinfantil">
 <meta property="og:title" content="Primer añito · Una propuesta pensada para su primer año">
 <meta property="og:description" content="Sesión de fotos de primer añito en Estudio Fotoinfantil · Su trono ya está listo">
-<meta property="og:image" content="https://estudiofotoinfantil.github.io/WebEstudio/primer-anito/og.jpg?v=655a4d20">
+<meta property="og:image" content="https://estudiofotoinfantil.github.io/WebEstudio/primer-anito/og.jpg?v=b2d98871">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:url" content="https://estudiofotoinfantil.github.io/WebEstudio/primer-anito/">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" type="image/png" href="assets/favicon.png?v=655a4d20">
-<link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=655a4d20">
+<link rel="icon" type="image/png" href="assets/favicon.png?v=b2d98871">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=b2d98871">
 <link rel="preload" href="fonts/ballet-static-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/pinyon-script-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/cormorant-ln-500-italic.woff2" as="font" type="font/woff2" crossorigin>
@@ -40,11 +40,13 @@
   }
   k();
   window.addEventListener('resize', k);
+  window.addEventListener('load', k);   // al aparecer la barra de scroll (PC) cambia el ancho útil
+  if (window.ResizeObserver) new ResizeObserver(function () { requestAnimationFrame(k); }).observe(d);
   window.__fitK = k;
 })();
 </script>
-<script>window.NAV_V='655a4d20';</script>
-<script src="config.js?v=655a4d20"></script>
+<script>window.NAV_V='b2d98871';</script>
+<script src="config.js?v=b2d98871"></script>
 <style>
 @font-face{font-family:"Ballet";src:url(fonts/ballet-static-400.woff2) format("woff2");font-weight:400;font-display:block}
 @font-face{font-family:"Pinyon";src:url(fonts/pinyon-script-latin-400-normal.woff2) format("woff2");font-display:block}
@@ -1389,6 +1391,6 @@ html.measuring .web-only{display:none!important}
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="app.js?v=655a4d20" defer></script>
+<script src="app.js?v=b2d98871" defer></script>
 </body>
 </html>
