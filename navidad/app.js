@@ -69,8 +69,11 @@
     if (!ts.length) return;
     var fs = +svg.getAttribute('data-fs'), mw = +svg.getAttribute('data-maxw');
     for (var i = 0; i < ts.length; i++) ts[i].setAttribute('font-size', fs);
-    var w = 0;
-    try { w = ts[ts.length - 1].getComputedTextLength(); } catch (e) { w = 0; }
+    var w = 0;   // se mide el texto principal (el brillo animado puede estar oculto)
+    for (var j = 0; j < ts.length; j++) {
+      if (ts[j].classList.contains('shine')) continue;
+      try { w = Math.max(w, ts[j].getComputedTextLength()); } catch (e) { /* sin medida */ }
+    }
     if (w > mw) {
       var s = (fs * mw / w).toFixed(2);
       for (i = 0; i < ts.length; i++) ts[i].setAttribute('font-size', s);

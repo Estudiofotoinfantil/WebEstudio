@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Generador de propuestas · Estudio Fotoinfantil</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#2b1b12">
+<link rel="icon" type="image/png" href="crear-assets/favicon.png?v=20e5413d">
+<link rel="apple-touch-icon" href="crear-assets/apple-touch-icon.png?v=20e5413d">
+<script src="navidad/config.js?v=20e5413d"></script>
+<script src="primer-anito/config.js?v=20e5413d"></script>
+<style>
+@font-face{font-family:"Pinyon";src:url(crear-assets/pinyon-script-latin-400-normal.woff2) format("woff2");font-display:swap}
+@font-face{font-family:"Cinzel";font-weight:600;src:url(crear-assets/cinzel-latin-600-normal.woff2) format("woff2");font-display:swap}
+@font-face{font-family:"Cinzel";font-weight:700;src:url(crear-assets/cinzel-latin-700-normal.woff2) format("woff2");font-display:swap}
+@font-face{font-family:"Cormorant LN";font-weight:500;src:url(crear-assets/cormorant-ln-500-normal.woff2) format("woff2");font-display:swap}
+@font-face{font-family:"Cormorant LN";font-weight:600;src:url(crear-assets/cormorant-ln-600-normal.woff2) format("woff2");font-display:swap}
+@font-face{font-family:"Cormorant LN";font-weight:700;src:url(crear-assets/cormorant-ln-700-normal.woff2) format("woff2");font-display:swap}
+@font-face{font-family:"Cormorant LN";font-weight:500;font-style:italic;src:url(crear-assets/cormorant-ln-500-italic.woff2) format("woff2");font-display:swap}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{min-height:100vh;background:#2b1b12;color:#f3e6d3;font-family:"Cormorant LN",Georgia,serif;font-size:18px;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(120% 70% at 50% 0%,#4f3524 0%,#2b1b12 55%,#1c120b 100%)}
+[hidden]{display:none!important}
+.wrap{max-width:520px;margin:0 auto;padding:22px 16px calc(40px + env(safe-area-inset-bottom))}
+header{text-align:center;margin-bottom:18px}
+header img{width:118px}
+h1{font-family:"Pinyon";font-weight:400;font-size:44px;line-height:1.15;color:#ecd08e;margin-top:6px;text-shadow:0 2px 4px rgba(10,0,3,.5)}
+.sub{font-family:"Cinzel";font-weight:600;font-size:10px;letter-spacing:.32em;color:#d9bd7c;margin-top:2px}
+.card{position:relative;margin-top:16px;padding:20px 18px;border-radius:12px;background:rgba(40,25,16,.78);box-shadow:0 0 0 1px rgba(222,190,120,.55),0 18px 40px rgba(0,0,0,.45)}
+h2{font-family:"Cinzel";font-weight:600;font-size:12px;letter-spacing:.28em;color:#e3c98d}
+p{line-height:1.4}
+.muted{color:#d9c4a6;font-style:italic;font-size:16px}
+label,.lab{display:block;margin-top:16px;font-family:"Cinzel";font-weight:600;font-size:11px;letter-spacing:.2em;color:#e3c98d}
+label span,.lab span{font-family:"Cormorant LN";font-style:italic;font-weight:500;letter-spacing:0;font-size:15px;color:#cdb594;text-transform:none}
+input,textarea{display:block;width:100%;margin-top:7px;padding:13px 14px;border-radius:10px;border:0;outline:0;background:#fffaf1;color:#3a2320;font-family:"Cormorant LN",Georgia,serif;font-weight:600;font-size:20px;box-shadow:inset 0 0 0 1px rgba(176,138,70,.7)}
+input[type=date]{min-height:50px;-webkit-appearance:none;appearance:none}
+input:focus,textarea:focus{box-shadow:inset 0 0 0 2px #c9a259}
+textarea{font-weight:500;font-size:17px;line-height:1.35;resize:vertical}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.chip{position:relative}
+.chip input{position:absolute;opacity:0;pointer-events:none}
+.chip span{display:flex;align-items:center;gap:7px;min-height:42px;padding:0 16px;border-radius:21px;box-shadow:inset 0 0 0 1px rgba(222,190,120,.55);font-family:"Cinzel";font-weight:600;font-size:10.5px;letter-spacing:.16em;color:#e8d3a6;cursor:pointer;user-select:none;-webkit-user-select:none}
+.chip span i{width:12px;height:12px;border-radius:6px;display:inline-block}
+.chip input:checked+span{background:linear-gradient(180deg,#f7e5a8 0%,#d9b566 42%,#c39a4b 58%,#ebd08a 100%);color:#3f2516;box-shadow:inset 0 1px 0 #fff6d8,inset 0 -1px 0 #8a6224}
+.chip input:focus-visible+span{outline:2px solid #ecd08e;outline-offset:2px}
+.chips.big .chip span{min-height:48px;font-size:11px;padding:0 18px}
+.row2{display:flex;gap:10px}
+.row2>div{flex:1;min-width:0}
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:52px;margin-top:18px;border:0;border-radius:26px;cursor:pointer;text-decoration:none;
+  background:linear-gradient(180deg,#f7e5a8 0%,#d9b566 42%,#c39a4b 58%,#ebd08a 100%);box-shadow:inset 0 1px 0 #fff6d8,inset 0 -1px 0 #8a6224,0 10px 20px -8px rgba(0,0,0,.6);
+  font-family:"Cinzel";font-weight:700;font-size:12px;letter-spacing:.2em;color:#3f2516}
+.btn svg{width:20px;height:20px}
+.btn2{display:flex;align-items:center;justify-content:center;gap:8px;flex:1;min-height:46px;border:0;border-radius:23px;cursor:pointer;background:transparent;text-decoration:none;
+  box-shadow:inset 0 0 0 1px rgba(222,190,120,.75);font-family:"Cinzel";font-weight:600;font-size:10.5px;letter-spacing:.18em;color:#f0d796}
+.row{display:flex;gap:10px;margin-top:10px}
+.err{margin-top:10px;color:#ffb4b4;font-style:italic}
+.hint{margin-top:7px;font-size:15px}
+.res .k{font-family:"Cinzel";font-weight:600;font-size:10px;letter-spacing:.26em;color:#d9bd7c}
+.res .nm{font-family:"Pinyon";font-size:38px;line-height:1.2;color:#ecd08e;margin-top:2px;word-break:break-word}
+.res .det{font-style:italic;color:#d9c4a6;font-size:16px;margin-top:2px}
+.link{margin-top:8px;padding:11px 12px;border-radius:9px;background:rgba(255,250,241,.08);box-shadow:inset 0 0 0 1px rgba(222,190,120,.35);font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;line-height:1.4;color:#f6e8cf;word-break:break-all;user-select:all;-webkit-user-select:all}
+.hh{display:flex;align-items:center;justify-content:space-between}
+.hh button{border:0;background:none;color:#d9bd7c;font-family:"Cormorant LN";font-style:italic;font-size:16px;cursor:pointer;text-decoration:underline}
+ul{list-style:none;margin-top:6px}
+li{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid rgba(222,190,120,.2)}
+li:last-child{border-bottom:0}
+li .who{flex:1;min-width:0}
+li .who b{display:block;font-family:"Cormorant LN";font-weight:700;font-size:19px;color:#f6e8cf;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+li .who small{display:block;font-style:italic;font-size:14px;color:#cdb594;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+li .tag{display:inline-block;margin-right:6px;padding:1px 7px;border-radius:8px;font-family:"Cinzel";font-style:normal;font-weight:600;font-size:8.5px;letter-spacing:.14em;color:#3f2516;background:#e3c98d;vertical-align:1px}
+li .tag.nav{background:#d98b8b}
+li a,li button{flex:none;display:flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:21px;border:0;cursor:pointer;background:transparent;box-shadow:inset 0 0 0 1px rgba(222,190,120,.6);color:#f0d796}
+li svg{width:19px;height:19px}
+.status{margin-top:12px;font-size:15.5px;line-height:1.5;color:#e2cdb0}
+.status b{color:#f3dc9c}
+.status h3{font-family:"Cinzel";font-weight:600;font-size:10px;letter-spacing:.24em;color:#d9bd7c;margin-top:12px}
+.foot{text-align:center;margin-top:18px}
+.foot button{border:0;background:none;color:#cdb594;font-family:"Cormorant LN";font-style:italic;font-size:16px;text-decoration:underline;cursor:pointer}
+.toast{position:fixed;left:50%;top:16px;z-index:9;transform:translate(-50%,-170%);opacity:0;visibility:hidden;padding:10px 18px;border-radius:20px;background:#3a2417;color:#f3dc9c;font-weight:600;font-style:italic;box-shadow:0 0 0 1px rgba(222,190,120,.6),0 10px 24px rgba(0,0,0,.45);transition:transform .35s,opacity .35s,visibility .35s}
+.toast.on{transform:translate(-50%,0);opacity:1;visibility:visible}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="chat" viewBox="0 0 24 24"><path d="M12 3.2c-5 0-9 3.4-9 7.7 0 2.4 1.3 4.6 3.4 6l-.8 3.6 3.9-2.2c.8.2 1.6.3 2.5.3 5 0 9-3.4 9-7.7S17 3.2 12 3.2z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="8.4" cy="11" r="1.1" fill="currentColor"/><circle cx="12" cy="11" r="1.1" fill="currentColor"/><circle cx="15.6" cy="11" r="1.1" fill="currentColor"/></symbol>
+  <symbol id="copy" viewBox="0 0 24 24"><rect x="8.5" y="8.5" width="11" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M15.5 8.5V5.5a2 2 0 0 0-2-2h-7a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h2" fill="none" stroke="currentColor" stroke-width="1.5"/></symbol>
+  <symbol id="eye" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.5"/></symbol>
+</svg>
+<main class="wrap">
+  <header>
+    <img src="crear-assets/logo_foil_light_s.webp" alt="Estudio Fotoinfantil">
+    <h1>Propuestas</h1>
+    <div class="sub">GENERADOR DE LINKS</div>
+  </header>
+
+  <section class="card" id="lock">
+    <h2>ACCESO</h2>
+    <p class="muted" style="margin-top:6px">Ingresá la contraseña del estudio.</p>
+    <form id="lockf" autocomplete="on">
+      <input id="pw" type="password" autocomplete="current-password" placeholder="Contraseña" aria-label="Contraseña">
+      <button class="btn" type="submit">ENTRAR</button>
+    </form>
+    <p class="err" id="err" hidden>Contraseña incorrecta. Probá de nuevo.</p>
+  </section>
+
+  <div id="app" hidden>
+    <form class="card" id="f" autocomplete="off" novalidate>
+      <h2>NUEVA PROPUESTA</h2>
+      <div class="lab" id="lbtipo">Sesión</div>
+      <div class="chips big" role="radiogroup" aria-labelledby="lbtipo">
+        <label class="chip"><input type="radio" name="tipo" value="pa"><span>PRIMER AÑITO</span></label>
+        <label class="chip"><input type="radio" name="tipo" value="nav"><span>NAVIDAD 2026</span></label>
+      </div>
+      <label for="bebe">Nombre del bebé</label>
+      <input id="bebe" maxlength="40" placeholder="Ej: Alaia" required autocapitalize="words" enterkeyhint="next">
+      <label for="mama">Nombre de la mamá <span>(opcional)</span></label>
+      <input id="mama" maxlength="40" placeholder="Ej: Laura" autocapitalize="words" enterkeyhint="next">
+      <p class="muted hint">Si cargás el nombre de la mamá, la carta empieza con «Querida Laura,».</p>
+      <div id="paf">
+        <div class="lab" id="lbg">Es… <span>(cambia los colores y las fotos)</span></div>
+        <div class="chips" role="radiogroup" aria-labelledby="lbg">
+          <label class="chip"><input type="radio" name="g" value="nena"><span><i style="background:#dca0ab"></i>NENA</span></label>
+          <label class="chip"><input type="radio" name="g" value="nene"><span><i style="background:#a3c3da"></i>NENE</span></label>
+          <label class="chip"><input type="radio" name="g" value="" checked><span><i style="background:#d4b06e"></i>SIN ESPECIFICAR</span></label>
+        </div>
+        <div class="row2">
+          <div><label for="cumple">Primer cumple <span>(opcional)</span></label><input id="cumple" type="date"></div>
+          <div><label for="hasta">Valores hasta</label><input id="hasta" type="date"></div>
+        </div>
+        <div class="chips" id="vchips" aria-label="Vigencia rápida">
+          <label class="chip"><input type="radio" name="vig" value="7"><span>7 DÍAS</span></label>
+          <label class="chip"><input type="radio" name="vig" value="15"><span>15 DÍAS</span></label>
+          <label class="chip"><input type="radio" name="vig" value="30"><span>30 DÍAS</span></label>
+          <label class="chip"><input type="radio" name="vig" value="0"><span>SIN FECHA</span></label>
+        </div>
+        <p class="muted hint">Con la fecha del cumple, la propuesta cuenta las semanas que faltan y marca el momento ideal en el calendario. Los valores del link quedan fijos hasta la fecha de vigencia.</p>
+      </div>
+      <button class="btn" type="submit">CREAR LINK</button>
+      <p class="err" id="ferr" hidden></p>
+    </form>
+
+    <section class="card res" id="res" hidden>
+      <div class="k" id="rk">PROPUESTA PARA</div>
+      <div class="nm" id="rnm"></div>
+      <div class="det" id="rdet"></div>
+      <div class="link" id="link"></div>
+      <a class="btn" id="bwa" href="#" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#chat"/></svg>ENVIAR POR WHATSAPP</a>
+      <div class="row">
+        <button class="btn2" type="button" id="bcopy"><svg width="17" height="17" aria-hidden="true"><use href="#copy"/></svg>COPIAR LINK</button>
+        <a class="btn2" id="bview" href="#" target="_blank" rel="noopener"><svg width="17" height="17" aria-hidden="true"><use href="#eye"/></svg>VER</a>
+      </div>
+      <label for="msg">Mensaje para WhatsApp <span>(podés editarlo)</span></label>
+      <textarea id="msg" rows="5"></textarea>
+      <div class="row"><button class="btn2" type="button" id="bcopymsg"><svg width="17" height="17" aria-hidden="true"><use href="#copy"/></svg>COPIAR MENSAJE</button></div>
+    </section>
+
+    <section class="card">
+      <div class="hh"><h2>ÚLTIMOS LINKS</h2><button type="button" id="clr">Borrar lista</button></div>
+      <ul id="hist"></ul>
+      <p class="muted" id="empty" style="margin-top:8px">Todavía no creaste links en este dispositivo.</p>
+    </section>
+
+    <section class="card">
+      <h2>ESTADO</h2>
+      <div class="status" id="status"></div>
+    </section>
+    <div class="foot"><button type="button" id="out">Cerrar sesión en este dispositivo</button></div>
+  </div>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  'use strict';
+  var HASH = 'eb75d1288917be867ef113a5fc8f9cdee42feec65e211eb43ce34d281c9e1e44';
+  var KEY_OK = 'navgen_ok', KEY_H = 'navgen_hist', KEY_T = 'navgen_tipo';
+  var NAV = window.NAVIDAD || {}, PA = window.PRIMER_ANITO || {};
+  var TIPOS = { pa: { name: 'Primer añito', path: 'primer-anito/' }, nav: { name: 'Navidad 2026', path: 'navidad/' } };
+  function $(s) { return document.querySelector(s); }
+  function $$(s) { return Array.prototype.slice.call(document.querySelectorAll(s)); }
+  function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) { return null; } }
+
+  var toastEl = $('#toast'), tt;
+  function toast(m) { toastEl.textContent = m; toastEl.classList.add('on'); clearTimeout(tt); tt = setTimeout(function () { toastEl.classList.remove('on'); }, 2000); }
+
+  async function sha(t) {
+    var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(t));
+    return Array.from(new Uint8Array(buf)).map(function (b) { return b.toString(16).padStart(2, '0'); }).join('');
+  }
+
+  /* ---------------------------------------------------------------- fechas (hora de Argentina) */
+  function todayAR() {
+    try {
+      var parts = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Argentina/Buenos_Aires', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(new Date());
+      var m = {}; parts.forEach(function (p) { m[p.type] = p.value; });
+      return m.year + '-' + m.month + '-' + m.day;
+    } catch (e) { return new Date(Date.now() - 3 * 3600 * 1000).toISOString().slice(0, 10); }
+  }
+  function addDays(s, n) { var p = s.split('-').map(Number), d = new Date(Date.UTC(p[0], p[1] - 1, p[2] + n)); return d.toISOString().slice(0, 10); }
+  function validDate(s) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(String(s || ''))) return '';
+    var p = s.split('-').map(Number), d = new Date(Date.UTC(p[0], p[1] - 1, p[2]));
+    return d.getUTCFullYear() === p[0] && d.getUTCMonth() === p[1] - 1 && d.getUTCDate() === p[2] ? s : '';
+  }
+  function fmtDate(iso) { var p = String(iso || '').split('-'); return p.length === 3 ? (+p[2]) + '/' + (+p[1]) : iso; }
+  function fmtDateY(iso) { var p = String(iso || '').split('-'); return p.length === 3 ? (+p[2]) + '/' + (+p[1]) + '/' + p[0] : iso; }
+  function money(n) { return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+
+  /* ---------------------------------------------------------------- acceso */
+  function unlock() { $('#lock').hidden = true; $('#app').hidden = false; renderHist(); renderStatus(); setTimeout(function () { $('#bebe').focus(); }, 50); }
+  if (store(KEY_OK) === HASH) unlock();
+  $('#lockf').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    var h = '';
+    try { h = await sha($('#pw').value.trim()); } catch (err) { h = ''; }
+    if (h === HASH) { store(KEY_OK, HASH); $('#err').hidden = true; unlock(); }
+    else { $('#err').hidden = false; $('#pw').select(); }
+  });
+  $('#out').addEventListener('click', function () { store(KEY_OK, null); location.reload(); });
+
+  /* ---------------------------------------------------------------- formulario */
+  function clean(s) {
+    s = String(s || '').replace(/[\u0000-\u001f\u007f<>{}\[\]\\"`]/g, '').replace(/\s+/g, ' ').trim();
+    if (s.length > 40) { var cut = s.slice(0, 41), sp = cut.lastIndexOf(' '); s = (sp > 15 ? cut.slice(0, sp) : s.slice(0, 40)).trim(); }
+    if (s && (s === s.toLowerCase() || s === s.toUpperCase())) {
+      s = s.toLowerCase().replace(/(^|[\s\-'’])([^\s\-'’])/g, function (m, a, b) { return a + b.toUpperCase(); });
+      s = s.replace(/ (De|Del|La|Las|Los|Y)(?= )/g, function (m, w) { return ' ' + w.toLowerCase(); });
+    }
+    return s;
+  }
+  var q0 = new URLSearchParams(location.search);
+  var tipo0 = q0.get('tipo') === 'navidad' ? 'nav' : (q0.get('tipo') === 'primer-anito' ? 'pa' : (store(KEY_T) || 'pa'));
+  if (!TIPOS[tipo0]) tipo0 = 'pa';
+  $$('input[name=tipo]').forEach(function (r) { r.checked = r.value === tipo0; });
+  function tipo() { var r = $('input[name=tipo]:checked'); return r ? r.value : 'pa'; }
+  function syncTipo() { $('#paf').hidden = tipo() !== 'pa'; store(KEY_T, tipo()); }
+  $$('input[name=tipo]').forEach(function (r) { r.addEventListener('change', syncTipo); });
+  syncTipo();
+
+  var VD = +PA.vigenciaDias || 7;
+  function setVig(days) {
+    $('#hasta').value = days ? addDays(todayAR(), days) : '';
+    $$('input[name=vig]').forEach(function (r) { r.checked = +r.value === days; });
+  }
+  setVig(VD);
+  $$('input[name=vig]').forEach(function (r) { r.addEventListener('change', function () { setVig(+r.value); }); });
+  $('#hasta').addEventListener('input', function () { $$('input[name=vig]').forEach(function (r) { r.checked = false; }); if (!$('#hasta').value) $('input[name=vig][value="0"]').checked = true; });
+  $('#hasta').min = todayAR();
+
+  var BASE = location.href.split('#')[0].split('?')[0].replace(/[^\/]*$/, '');
+  function linkFor(x) {
+    var q = new URLSearchParams();
+    q.set('para', x.b);
+    if (x.m) q.set('mama', x.m);
+    if (x.tipo === 'pa') {
+      if (x.g) q.set('g', x.g);
+      if (x.c) q.set('cumple', x.c);
+      if (x.h) { q.set('hasta', x.h); if (x.l) q.set('l', x.l); }
+    }
+    return BASE + TIPOS[x.tipo].path + '?' + q.toString();
+  }
+  function msgFor(x, link) {
+    if (x.tipo === 'nav') {
+      return (x.m ? '¡Hola ' + x.m + '! 🎄' : '¡Hola! 🎄') + ' Te comparto la propuesta de Navidad 2026 que preparamos especialmente para ' + x.b + ' ✨\n' +
+        'Ahí vas a encontrar las experiencias, las fechas y cómo reservar.\n\n' + link;
+    }
+    return (x.m ? '¡Hola ' + x.m + '! 👑' : '¡Hola! 👑') + ' Te comparto la propuesta para el primer añito de ' + x.b + ' que preparamos especialmente para ustedes ✨\n' +
+      'Ahí vas a encontrar los packs, las fechas disponibles y cómo reservar.\n\n' + link;
+  }
+  function detFor(x) {
+    if (x.tipo === 'nav') return 'Navidad 2026';
+    var d = ['Primer añito'];
+    if (x.g) d.push(x.g === 'nena' ? 'nena' : 'nene');
+    if (x.c) d.push('cumple ' + fmtDate(x.c));
+    d.push(x.h ? 'valores hasta ' + fmtDate(x.h) : 'sin vencimiento');
+    return d.join(' · ');
+  }
+  function waShare(text) { return 'https://wa.me/?text=' + encodeURIComponent(text); }
+  function copy(t) {
+    if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(t);
+    return new Promise(function (res, rej) {
+      var ta = document.createElement('textarea'); ta.value = t; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy') ? res() : rej(); } catch (e) { rej(e); }
+      document.body.removeChild(ta);
+    });
+  }
+
+  var cur = null;
+  function show(x) {
+    var link = linkFor(x);
+    cur = { x: x, link: link };
+    $('#rk').textContent = 'PROPUESTA ' + TIPOS[x.tipo].name.toUpperCase() + ' PARA';
+    $('#rnm').textContent = x.b + (x.m ? ' · ' + x.m : '');
+    $('#rdet').textContent = detFor(x);
+    $('#link').textContent = link;
+    $('#bview').href = link;
+    $('#msg').value = msgFor(x, link);
+    $('#bwa').href = waShare($('#msg').value);
+    $('#res').hidden = false;
+    $('#res').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  $('#msg').addEventListener('input', function () { $('#bwa').href = waShare($('#msg').value); });
+  function ferr(t) { $('#ferr').textContent = t; $('#ferr').hidden = !t; }
+  $('#f').addEventListener('submit', function (e) {
+    e.preventDefault();
+    ferr('');
+    var t = tipo(), b = clean($('#bebe').value), m = clean($('#mama').value);
+    if (!b) { ferr('Falta el nombre del bebé.'); $('#bebe').focus(); return; }
+    var x = { tipo: t, b: b, m: m, t: Date.now() };
+    if (t === 'pa') {
+      var g = $('input[name=g]:checked');
+      x.g = g ? g.value : '';
+      var c = $('#cumple').value.trim(), h = $('#hasta').value.trim();
+      if (c && !validDate(c)) { ferr('La fecha del cumple no es válida.'); return; }
+      if (h && !validDate(h)) { ferr('La fecha de vigencia no es válida.'); return; }
+      if (h && h < todayAR()) { ferr('La vigencia no puede ser anterior a hoy.'); return; }
+      if (c && (c < addDays(todayAR(), -400) || c > addDays(todayAR(), 400))) { ferr('Revisá la fecha del cumple: debería ser dentro de este año.'); return; }
+      x.c = c; x.h = h; x.l = PA.listaActual || '';
+    }
+    show(x);
+    addHist(x);
+  });
+  $('#bcopy').addEventListener('click', function () { if (cur) copy(cur.link).then(function () { toast('Link copiado'); }, function () { toast('No se pudo copiar'); }); });
+  $('#bcopymsg').addEventListener('click', function () { copy($('#msg').value).then(function () { toast('Mensaje copiado'); }, function () { toast('No se pudo copiar'); }); });
+
+  /* ---------------------------------------------------------------- historial (se guarda en este dispositivo) */
+  function getHist() {
+    var h;
+    try { h = JSON.parse(store(KEY_H) || '[]') || []; } catch (e) { h = []; }
+    return h.map(function (x) { if (!x.tipo) x.tipo = 'nav'; return x; }).filter(function (x) { return TIPOS[x.tipo] && x.b; });
+  }
+  function same(a, b) { return a.tipo === b.tipo && a.b === b.b && (a.m || '') === (b.m || '') && (a.g || '') === (b.g || '') && (a.c || '') === (b.c || '') && (a.h || '') === (b.h || ''); }
+  function addHist(x) {
+    var h = getHist().filter(function (y) { return !same(x, y); });
+    h.unshift(x);
+    store(KEY_H, JSON.stringify(h.slice(0, 60)));
+    renderHist();
+  }
+  function fmt(t) { try { return new Date(t).toLocaleDateString('es-AR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }); } catch (e) { return ''; } }
+  function renderHist() {
+    var ul = $('#hist'), h = getHist();
+    ul.innerHTML = '';
+    $('#empty').hidden = h.length > 0;
+    h.forEach(function (x) {
+      var link = linkFor(x);
+      var li = document.createElement('li');
+      var who = document.createElement('div'); who.className = 'who';
+      var bb = document.createElement('b'); bb.textContent = x.b + (x.m ? ' · ' + x.m : '');
+      var sm = document.createElement('small');
+      var tg = document.createElement('span'); tg.className = 'tag' + (x.tipo === 'nav' ? ' nav' : ''); tg.textContent = x.tipo === 'nav' ? 'NAVIDAD' : 'AÑITO';
+      sm.appendChild(tg);
+      sm.appendChild(document.createTextNode(fmt(x.t) + (x.tipo === 'pa' && x.h ? ' · hasta ' + fmtDate(x.h) : '') + (x.tipo === 'pa' && x.c ? ' · cumple ' + fmtDate(x.c) : '')));
+      who.appendChild(bb); who.appendChild(sm);
+      var wa = document.createElement('a'); wa.href = waShare(msgFor(x, link)); wa.target = '_blank'; wa.rel = 'noopener'; wa.setAttribute('aria-label', 'Enviar por WhatsApp');
+      wa.innerHTML = '<svg aria-hidden="true"><use href="#chat"/></svg>';
+      var cp = document.createElement('button'); cp.type = 'button'; cp.setAttribute('aria-label', 'Copiar link');
+      cp.innerHTML = '<svg aria-hidden="true"><use href="#copy"/></svg>';
+      cp.addEventListener('click', function () { copy(link).then(function () { toast('Link copiado'); }); });
+      var vw = document.createElement('a'); vw.href = link; vw.target = '_blank'; vw.rel = 'noopener'; vw.setAttribute('aria-label', 'Ver propuesta');
+      vw.innerHTML = '<svg aria-hidden="true"><use href="#eye"/></svg>';
+      li.appendChild(who); li.appendChild(wa); li.appendChild(cp); li.appendChild(vw);
+      li.addEventListener('dblclick', function () { show(x); });
+      ul.appendChild(li);
+    });
+  }
+  $('#clr').addEventListener('click', function () { if (confirm('¿Borrar la lista de links de este dispositivo?')) { store(KEY_H, null); renderHist(); } });
+
+  /* ---------------------------------------------------------------- estado */
+  function renderStatus() {
+    var hoy = todayAR(), out = '';
+    var L = (PA.listas || {})[PA.listaActual];
+    out += '<h3>PRIMER AÑITO</h3>';
+    if (L) out += 'Valores actuales (lista <b>' + PA.listaActual + '</b>): Esencial <b>$' + money(L.esencial) + '</b> · Recuerdo <b>$' + money(L.recuerdo) + '</b> · Historia <b>$' + money(L.historia) + '</b>.<br>';
+    out += 'Vigencia sugerida: <b>' + VD + ' días</b>. Los días ocupados se leen del sistema de reservas.';
+    var rh = NAV.regaloHasta || '2026-10-31', comp = (NAV.completos || []).slice().sort();
+    out += '<h3>NAVIDAD 2026</h3>';
+    out += (hoy <= rh ? 'Regalo de octubre: <b>activo</b> hasta el ' + fmtDate(rh) + '.' : 'Regalo de octubre: <b>terminado</b> (ya no se muestra).') + '<br>';
+    out += (comp.length ? 'Días completos: <b>' + comp.map(fmtDate).join(', ') + '</b>.' : 'Días completos: <b>ninguno</b> por ahora.') + '<br>';
+    out += 'Turnos hasta el <b>' + fmtDate(NAV.ultimoDia || '2026-12-23') + '</b>.';
+    $('#status').innerHTML = out;
+  }
+})();
+</script>
+</body>
+</html>
