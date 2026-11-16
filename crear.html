@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#2b1b12">
 <link rel="icon" type="image/png" href="crear-assets/favicon.png?v=2835389d">
 <link rel="apple-touch-icon" href="crear-assets/apple-touch-icon.png?v=2835389d">
-<script src="navidad/config.js?v=2835389d"></script>
+<script src="navidad2/config.js?v=2835389d"></script>
 <script src="primer-anito/config.js?v=2835389d"></script>
 <script src="maternidad/config.js?v=2835389d"></script>
 <script src="mes-a-mes/config.js?v=2835389d"></script>
@@ -203,7 +203,7 @@ li svg{width:19px;height:19px}
   var HASH = 'fa869db9687c308c2af5bbe545c2247c93095af297a9a0c0560c305123a86428';
   var KEY_OK = 'navgen_ok', KEY_H = 'navgen_hist', KEY_T = 'navgen_tipo';
   var NAV = window.NAVIDAD || {}, PA = window.PRIMER_ANITO || {}, MAT = window.MATERNIDAD || {}, MM = window.MES_A_MES || {}, CU = window.CUMPLEANITOS || {};
-  var TIPOS = { pa: { name: 'Primer añito', path: 'primer-anito/' }, cu: { name: 'Cumpleañitos', path: 'cumpleanitos/' }, mm: { name: 'Mes a mes', path: 'mes-a-mes/' }, mat: { name: 'Embarazo', path: 'maternidad/' }, nav: { name: 'Navidad 2026', path: 'navidad/' } };
+  var TIPOS = { pa: { name: 'Primer añito', path: 'primer-anito/' }, cu: { name: 'Cumpleañitos', path: 'cumpleanitos/' }, mm: { name: 'Mes a mes', path: 'mes-a-mes/' }, mat: { name: 'Embarazo', path: 'maternidad/' }, nav: { name: 'Navidad 2026', path: 'navidad2/' } };
   function $(s) { return document.querySelector(s); }
   function $$(s) { return Array.prototype.slice.call(document.querySelectorAll(s)); }
   function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) { return null; } }
@@ -546,7 +546,7 @@ li svg{width:19px;height:19px}
     else out += WARN + '<b>Revisá maternidad/config.js</b>: no se pudo leer la lista de precios actual. Mientras tanto la propuesta muestra los valores con los que se publicó.';
     var rh = NAV.regaloHasta || '2026-10-31', comp = (NAV.completos || []).slice().sort();
     out += '<h3>NAVIDAD 2026</h3>';
-    if (!window.NAVIDAD) out += WARN + '<b>Revisá navidad/config.js</b>: no se pudo leer.<br>';
+    if (!window.NAVIDAD) out += WARN + '<b>Revisá navidad2/config.js</b>: no se pudo leer.<br>';
     out += (hoy <= rh ? 'Regalo de octubre: <b>activo</b> hasta el ' + fmtDate(rh) + '.' : 'Regalo de octubre: <b>terminado</b> (ya no se muestra).') + '<br>';
     out += (comp.length ? 'Días completos: <b>' + comp.map(fmtDate).join(', ') + '</b>.' : 'Días completos: <b>ninguno</b> por ahora.') + '<br>';
     out += 'Turnos hasta el <b>' + fmtDate(NAV.ultimoDia || '2026-12-23') + '</b>.';
