@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Un regalo para ustedes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#5a4146;--rose:#c98a8f;--rose2:#b0626a;--gold:#b8955a;--paper:#fffaf5}
+*{box-sizing:border-box;margin:0}
+html{color-scheme:light}
+body{font:300 16px/1.6 'Jost',system-ui,sans-serif;color:var(--ink);min-height:100dvh;overflow-x:hidden;background:radial-gradient(120% 90% at 50% 0%,#fdf1ee,#f3d9d6)}
+main{position:relative;z-index:1;min-height:100dvh;display:grid;place-items:center;padding:max(28px,env(safe-area-inset-top)) 20px max(28px,env(safe-area-inset-bottom))}
+main>*{grid-area:1/1}
+.serif{font-family:'Cormorant Garamond',Georgia,serif}
+
+/* Sobre */
+.env{position:relative;width:min(84vw,340px);aspect-ratio:10/7;border:0;background:none;cursor:pointer;perspective:900px;font:inherit;color:inherit;-webkit-tap-highlight-color:transparent;transition:transform .9s ease,opacity .8s ease,visibility 0s .9s}
+.env>span{position:absolute}
+.back{inset:0;border-radius:6px;background:#e8c2bf;box-shadow:0 22px 44px rgba(120,70,80,.25)}
+.paper{left:7%;right:7%;top:7%;bottom:9%;z-index:2;border-radius:4px;background:var(--paper);display:grid;place-items:center;color:var(--rose);transition:transform 1.1s cubic-bezier(.2,.8,.2,1) .55s}
+.front{inset:0;z-index:3;border-radius:6px;background:linear-gradient(165deg,#f7dedb,#eec7c4);clip-path:polygon(0 0,50% 56%,100% 0,100% 100%,0 100%)}
+.flap{left:0;right:0;top:0;height:56%;z-index:4;transform-origin:top;background:linear-gradient(#f1cdca,#e7bab7);clip-path:polygon(0 0,100% 0,50% 100%);transition:transform .9s ease,z-index 0s .45s}
+.seal{left:50%;top:56%;width:46px;height:46px;margin:-23px 0 0 -23px;z-index:5;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 30%,#d99ba0,#b0626a);box-shadow:0 4px 10px rgba(120,50,60,.35);animation:pulse 2.4s ease-in-out infinite;transition:opacity .35s,transform .35s}
+.pre,.hint{left:50%;transform:translateX(-50%);white-space:nowrap;text-align:center;transition:opacity .4s}
+.pre{bottom:calc(100% + 34px);font-size:1.5rem;font-style:italic;color:var(--rose2)}
+.hint{top:calc(100% + 30px);font-size:.74rem;letter-spacing:.22em;text-transform:uppercase;color:var(--rose2);animation:blink 2.6s ease-in-out infinite}
+.open .flap{transform:rotateX(180deg);z-index:1}
+.open .paper{transform:translateY(-46%)}
+.open .seal{animation:none;opacity:0;transform:scale(1.6)}
+.open .hint{animation:none;opacity:0}
+.open .pre{opacity:0}
+.reveal .env{transform:translateY(34px) scale(.92);opacity:0;visibility:hidden;pointer-events:none}
+/* Centra el sobre en la pantalla del celular (la tarjeta oculta, más alta, lo empujaba hacia abajo) */
+.env{align-self:start;margin-top:calc(50vh - max(28px,env(safe-area-inset-top)) - min(84vw,340px)*.35);margin-top:calc(50dvh - max(28px,env(safe-area-inset-top)) - min(84vw,340px)*.35)}
+main:not(.reveal){height:100vh;height:100dvh;overflow:hidden}
+
+/* Tarjeta */
+.card{width:min(100%,400px);padding:36px 26px 24px;border-radius:20px;text-align:center;background:var(--paper);box-shadow:0 26px 60px rgba(120,70,80,.22);outline:1px solid rgba(184,149,90,.4);outline-offset:-10px;opacity:0;visibility:hidden;transform:translateY(28px) scale(.94);transition:opacity .9s ease,transform 1s cubic-bezier(.2,.8,.2,1),visibility 0s}
+.reveal .card{opacity:1;visibility:visible;transform:none}
+.r{opacity:0}
+.reveal .r{animation:rise .9s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:calc(var(--i)*.13s + .35s)}
+.eyebrow{font-size:.74rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold)}
+h1{font:italic 500 clamp(2rem,9vw,2.7rem)/1.1 'Cormorant Garamond',Georgia,serif;margin:8px 0 10px;color:var(--rose2);font-weight:500}
+.orn{display:block;margin:0 auto 14px}
+.msg b{font-weight:500}
+dl{margin:20px 0 4px;display:grid;gap:12px}
+dl div+div{border-top:1px solid rgba(184,149,90,.25);padding-top:12px}
+dt{font-size:.7rem;letter-spacing:.26em;text-transform:uppercase;color:var(--rose)}
+dd{font:500 1.55rem/1.2 'Cormorant Garamond',Georgia,serif}
+.where{margin-top:16px;font-size:.92rem}
+.btn{display:block;margin:20px auto 0;padding:14px 22px;border-radius:999px;background:linear-gradient(135deg,#d08f95,#b0626a);color:#fff;text-decoration:none;font-weight:500;letter-spacing:.04em;box-shadow:0 8px 20px rgba(176,98,106,.35)}
+.map{display:inline-block;margin-top:14px;color:var(--rose2);font-size:.9rem;text-underline-offset:4px}
+footer{margin-top:22px;padding-top:14px;border-top:1px dashed rgba(184,149,90,.5);font-size:.78rem;line-height:1.8}
+footer a{color:inherit;text-underline-offset:3px}
+footer a{white-space:nowrap} /* que el WhatsApp y el Instagram no se corten en dos renglones */
+.nova{opacity:.7}
+
+/* Pétalos */
+.petal{position:fixed;top:-5vh;left:var(--x);width:var(--s);height:calc(var(--s)*1.3);background:linear-gradient(135deg,#f6cfd0,#e9a9ae);border-radius:150% 0 150% 0;opacity:.55;pointer-events:none;z-index:0;animation:fall var(--d) linear var(--w) infinite}
+@keyframes fall{to{transform:translate3d(var(--dx),108vh,0) rotate(540deg)}}
+@keyframes pulse{50%{transform:scale(1.08)}}
+@keyframes blink{50%{opacity:.35}}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important}.petal{display:none}}
+</style>
+</head>
+<body>
+<main>
+  <button class="env" id="open" aria-label="Abrir el sobre">
+    <span class="pre serif">Tienen un regalo esperándolos</span>
+    <span class="back"></span>
+    <span class="paper"><svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-8-5.2-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 5.800-8 11-8 11z"/></svg></span>
+    <span class="front"></span>
+    <span class="flap"></span>
+    <span class="seal"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M12 21s-8-5.2-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 5.800-8 11-8 11z"/></svg></span>
+    <span class="hint">Tocá el sobre para abrirlo</span>
+  </button>
+
+  <section class="card">
+    <p class="eyebrow r" style="--i:0">Un regalo para ustedes</p>
+    <h1 class="r" style="--i:1">Para <span data-f="para"></span></h1>
+    <svg class="orn r" style="--i:2" width="120" height="14" viewBox="0 0 120 14" aria-hidden="true"><path d="M0 7h46M74 7h46" stroke="#b8955a" stroke-width=".8"/><path d="M60 12s-5.500-3.500-5.500-7.500a3 3 0 0 1 5.500-1.600A3 3 0 0 1 65.500 4.500C65.500 8.500 60 12 60 12z" fill="#c98a8f"/></svg>
+    <p class="msg r" style="--i:3"><b data-f="de"></b> les regalan una sesión de fotos de embarazo.<br><span data-f="mensaje"></span></p>
+    <dl class="r" style="--i:4">
+      <div><dt>Día</dt><dd id="dia"></dd></div>
+      <div><dt>Fecha</dt><dd id="fecha"></dd></div>
+      <div><dt>Horario</dt><dd id="hora"></dd></div>
+    </dl>
+    <p class="where r" style="--i:5"><b data-f="estudio"></b><br><span data-f="direccion"></span></p>
+    <a class="btn r" style="--i:6" id="wa" target="_blank" rel="noopener">Confirmar por WhatsApp</a>
+    <a class="map r" style="--i:6" id="map" target="_blank" rel="noopener">Cómo llegar</a>
+    <footer class="r" style="--i:7">
+      Instagram <a id="ig" target="_blank" rel="noopener"></a> · WhatsApp <a id="wa2" target="_blank" rel="noopener"></a>
+      <p class="nova">Invitación digital por <a id="nova" target="_blank" rel="noopener"></a></p>
+    </footer>
+  </section>
+</main>
+
+<script>
+/* ✏️ EDITÁ SOLO ESTE BLOQUE para cada clienta */
+const CONFIG = {
+  para: "Tomi y Bren",                              // quien recibe el regalo
+  de: "Mía, Gonza, Delia y Jorge",                              // quien lo regala
+  fecha: "2026-11-26",                     // AAAA-MM-DD (el día de la semana se calcula solo)
+  hora: "18:15",                           // formato 24 hs
+  estudio: "Estudio Foto Infantil",
+  direccion: "Lopez May 2946, Gregorio de Laferrere",
+  mapa: "https://maps.app.goo.gl/AnGkXfpr1pr8x3rx8",
+  mensaje: "Para que esta etapa tan linda quede guardada para siempre. ¡Los esperamos con mucho cariño!",
+  wa: "5491130448139",                     // WhatsApp sin + ni espacios
+  waTexto: "+54 9 11 3044-8139",
+  ig: "Estudio_fotoinfantil",
+  nova: "Novainvite.co"
+};
+
+const $ = s => document.querySelector(s);
+document.querySelectorAll('[data-f]').forEach(e => e.textContent = CONFIG[e.dataset.f]);
+
+const d = new Date(CONFIG.fecha + 'T12:00:00');
+const f = o => new Intl.DateTimeFormat('es-AR', o).format(d);
+const dia = f({weekday:'long'});
+$('#dia').textContent = dia[0].toUpperCase() + dia.slice(1);
+$('#fecha').textContent = f({day:'numeric', month:'long', year:'numeric'});
+$('#hora').textContent = CONFIG.hora + ' hs';
+
+const msg = `¡Hola! Somos ${CONFIG.para}. Recibimos el regalo de ${CONFIG.de} 🎁 y queremos confirmar nuestra sesión del ${dia} ${f({day:'numeric', month:'long'})} a las ${CONFIG.hora} hs.`;
+$('#wa').href = `https://wa.me/${CONFIG.wa}?text=${encodeURIComponent(msg)}`;
+$('#map').href = CONFIG.mapa;
+$('#ig').href = 'https://instagram.com/' + CONFIG.ig;       $('#ig').textContent = '@' + CONFIG.ig;
+$('#wa2').href = 'https://wa.me/' + CONFIG.wa;              $('#wa2').textContent = CONFIG.waTexto;
+$('#nova').href = 'https://instagram.com/' + CONFIG.nova;   $('#nova').textContent = '@' + CONFIG.nova;
+
+for (let i = 0; i < 14; i++) {
+  const p = document.createElement('i');
+  p.className = 'petal';
+  p.style.cssText = `--x:${Math.random()*100}vw;--s:${10+Math.random()*10}px;--d:${14+Math.random()*12}s;--w:-${Math.random()*20}s;--dx:${(Math.random()-.5)*30}vw`;
+  document.body.appendChild(p);
+}
+
+const stage = $('main'), still = matchMedia('(prefers-reduced-motion:reduce)').matches;
+$('#open').addEventListener('click', () => {
+  stage.classList.add('open');
+  setTimeout(() => stage.classList.add('reveal'), still ? 200 : 1900);
+}, {once:true});
+</script>
+</body>
+</html>
