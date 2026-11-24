@@ -235,7 +235,7 @@ li svg{width:19px;height:19px}
   function money(n) { return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
 
   /* ---------------------------------------------------------------- acceso */
-  function unlock() { $('#lock').hidden = true; $('#app').hidden = false; renderHist(); renderStatus(); setTimeout(function () { $('#bebe').focus(); }, 50); }
+  function unlock() { store('efi_estudio', '1'); $('#lock').hidden = true; $('#app').hidden = false; renderHist(); renderStatus(); setTimeout(function () { $('#bebe').focus(); }, 50); }
   if (store(KEY_OK) === HASH) unlock();
   $('#lockf').addEventListener('submit', async function (e) {
     e.preventDefault();
