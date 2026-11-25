@@ -202,6 +202,8 @@ li svg{width:19px;height:19px}
   'use strict';
   var HASH = 'fa869db9687c308c2af5bbe545c2247c93095af297a9a0c0560c305123a86428';
   var KEY_OK = 'navgen_ok', KEY_H = 'navgen_hist', KEY_T = 'navgen_tipo';
+  // antes de abrir el generador: la lista de últimos links se arma al entrar y necesita la dirección base
+  var BASE = location.href.split('#')[0].split('?')[0].replace(/[^\/]*$/, '');
   var NAV = window.NAVIDAD || {}, PA = window.PRIMER_ANITO || {}, MAT = window.MATERNIDAD || {}, MM = window.MES_A_MES || {}, CU = window.CUMPLEANITOS || {};
   var TIPOS = { pa: { name: 'Primer añito', path: 'primer-anito/' }, cu: { name: 'Cumpleañitos', path: 'cumpleanitos/' }, mm: { name: 'Mes a mes', path: 'mes-a-mes/' }, mat: { name: 'Embarazo', path: 'maternidad/' }, nav: { name: 'Navidad 2026', path: 'navidad2/' } };
   function $(s) { return document.querySelector(s); }
@@ -305,7 +307,6 @@ li svg{width:19px;height:19px}
   $('#hasta').addEventListener('input', function () { $$('input[name=vig]').forEach(function (r) { r.checked = false; }); if (!$('#hasta').value) $('input[name=vig][value="0"]').checked = true; });
   $('#hasta').min = todayAR();
 
-  var BASE = location.href.split('#')[0].split('?')[0].replace(/[^\/]*$/, '');
   function linkFor(x) {
     var q = new URLSearchParams();
     q.set('para', x.b);
