@@ -52,6 +52,7 @@
 
   function waText(kind, pack) {
     var para = bebe ? ' para ' + bebe : '';
+    if (kind === 'primos') return '¡Hola! Quiero reservar la Sesión de primos' + para + ' ✨';
     if (kind === 'pack') return '¡Hola! Quiero reservar la experiencia ' + pack + para + ' ✨';
     if (kind === 'regalo') return '¡Hola! Quiero reservar en octubre la sesión de Navidad' + para + ' y recibir la tarjeta de regalo ✨';
     return '¡Hola! Quiero reservar la sesión de Navidad 2026' + para + ' ✨';

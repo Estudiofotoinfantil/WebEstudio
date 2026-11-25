@@ -46,7 +46,7 @@
     });
   }
   var NOMBRES = { portada: 'Portada', carta: 'Carta', escenarios: 'Escenarios', sesion: 'Así es su sesión',
-    packs1: 'Destello e Ilusión', packs2: 'Magia y Polo Norte', productos: 'Cuadro y calendarios', regalo: 'Regalo',
+    packs1: 'Destello e Ilusión', packs2: 'Magia y Polo Norte', primos: 'Sesión de primos', productos: 'Cuadro y calendarios', regalo: 'Regalo',
     vestuario: 'Vestuario', fechas: 'Fechas', reserva: 'Cómo reservar', preguntas: 'Preguntas', cierre: 'Final' };
   function nombre(el) {
     var pg = el.getAttribute('data-pg');
