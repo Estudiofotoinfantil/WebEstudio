@@ -111,15 +111,77 @@
   $$('[data-regalo]').forEach(function (el) { el.hidden = !regalo; });
 
   var LAST = C.ultimoDia || '2026-12-23';
-  $$('.cal .d[data-date]').forEach(function (d) {
-    var ds = d.getAttribute('data-date');
-    if (d.classList.contains('off')) return;
-    if (ds < HOY || ds > LAST) { d.className = 'd off'; return; }
-    if (completos === 'all' || completos.indexOf(ds) >= 0) {
-      d.classList.remove('wk', 'we', 'fe');
-      d.classList.add('full');
+  /* Calendario vinculado a la agenda del panel (26/11/2026): los mismos horarios que ve el panel
+     (grilla de lunes a viernes y de sábados + horarios extra − horarios y días bloqueados − turnos tomados).
+     Día sin horarios = sin turnos; día con horarios pero todos tomados = COMPLETO.
+     Si no se puede leer la agenda, quedan los días de config.js (completos y sinTurnos). */
+  var sinTurnos = PDFBG ? [] : (C.sinTurnos || []).slice();
+  var vivo = false;
+  function marcarCalendario() {
+    $$('.cal .d[data-date]').forEach(function (d) {
+      var ds = d.getAttribute('data-date');
+      if (d.getAttribute('data-base') == null) d.setAttribute('data-base', d.className);
+      var base = d.getAttribute('data-base');
+      d.className = base;
+      if (/\boff\b/.test(base)) return;
+      if (ds < HOY || ds > LAST || (vivo && ds === HOY) || sinTurnos.indexOf(ds) >= 0) { d.className = 'd off'; return; }
+      if (completos === 'all' || completos.indexOf(ds) >= 0) {
+        d.classList.remove('wk', 'we', 'fe');
+        d.classList.add('full');
+      }
+    });
+  }
+  marcarCalendario();
+
+  var DIAS = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+  function horaTxt(h) { return h === '18:00' ? '18:15' : (h === '19:00' ? '19:15' : h); }   // en la propuesta, 18:15 y 19:15
+  function listaHoras(hs) {
+    var t = hs.map(function (h) { h = horaTxt(h); return /:00$/.test(h) ? h.slice(0, -3) : h; });
+    return (t.length > 1 ? t.slice(0, -1).join(', ') + ' y ' + t[t.length - 1] : t[0]) + ' h';
+  }
+  function sumarDia(ds) {
+    var d = new Date(ds + 'T12:00:00Z'); d.setUTCDate(d.getUTCDate() + 1);
+    return d.toISOString().slice(0, 10);
+  }
+  function aplicarAgenda(a) {
+    var grilla = a.grilla || {}, sem = grilla.semana || [], sab = grilla.sabado || [];
+    var bloqDia = {}, bloqHora = {}, extra = {}, ocup = a.ocupados || {};
+    (a.bloqueos || []).forEach(function (b) {
+      if (!b || !b.fecha) return;
+      if (b.tipo === 'dia') bloqDia[b.fecha] = 1;
+      else if (b.tipo === 'slot' && b.horario) (bloqHora[b.fecha] = bloqHora[b.fecha] || []).push(b.horario);
+      else if (b.tipo === 'slot_extra' && b.horario) (extra[b.fecha] = extra[b.fecha] || []).push(b.horario);
+    });
+    var full = [], off = [], prox = [];
+    for (var ds = sumarDia(HOY); ds <= LAST; ds = sumarDia(ds)) {
+      var dow = new Date(ds + 'T12:00:00Z').getUTCDay();
+      var hs = bloqDia[ds] ? [] : (dow === 6 ? sab.slice() : (dow >= 1 && dow <= 5 ? sem.slice() : []));
+      if (!bloqDia[ds]) (extra[ds] || []).forEach(function (h) { if (hs.indexOf(h) < 0) hs.push(h); });
+      hs = hs.filter(function (h) { return (bloqHora[ds] || []).indexOf(h) < 0; }).sort();
+      var libres = hs.filter(function (h) { return (ocup[ds] || []).indexOf(h) < 0; });
+      if (!hs.length) off.push(ds);
+      else if (!libres.length) full.push(ds);
+      else if (prox.length < 6) prox.push(DIAS[dow] + ' ' + (+ds.slice(8)) + '/' + (+ds.slice(5, 7)) + ' · ' + listaHoras(libres));
     }
-  });
+    vivo = true;
+    sinTurnos = off;
+    if (completos !== 'all') completos = (C.completos || []).concat(full);
+    marcarCalendario();
+    T.lib1 = prox.length ? prox.slice(0, 2).join('   ·   ') : 'Por ahora no quedan turnos libres: escribinos por WhatsApp';
+    T.lib2 = prox.slice(2, 4).join('   ·   ');
+    T.lib3 = prox.slice(4, 6).join('   ·   ');
+    ['lib1', 'lib2', 'lib3'].forEach(function (k) { var el = $('[data-line="' + k + '"]'); if (el) el.textContent = T[k]; });
+    fitAll();
+  }
+  T.lib1 = 'Consultanos por WhatsApp los turnos libres'; T.lib2 = ''; T.lib3 = '';
+  if (!PDFBG && C.agenda && !Q.has('_noapi')) {
+    var ctl = window.AbortController ? new AbortController() : null;
+    var tmo = setTimeout(function () { if (ctl) ctl.abort(); }, 9000);
+    fetch(C.agenda + '?action=horarios', ctl ? { signal: ctl.signal, cache: 'no-store' } : { cache: 'no-store' })
+      .then(function (r) { return r.json(); })
+      .then(function (a) { clearTimeout(tmo); if (a && a.ok && a.ocupados) aplicarAgenda(a); })
+      .catch(function () { clearTimeout(tmo); });
+  }
 
   /* ---------------------------------------------------------------- utilidades */
   var toastEl = $('#toast'), toastT;
@@ -338,7 +400,7 @@
     var need = { off: [], full: [] };
     cells.forEach(function (c) {
       if (c.kind === 'off') return;
-      if (c.date < HOY || c.date > LAST) need.off.push(c);
+      if (c.date < HOY || c.date > LAST || (vivo && c.date === HOY) || sinTurnos.indexOf(c.date) >= 0) need.off.push(c);
       else if (completos === 'all' || completos.indexOf(c.date) >= 0) need.full.push(c);
     });
     for (var k of ['off', 'full']) {
